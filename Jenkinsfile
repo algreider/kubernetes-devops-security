@@ -37,17 +37,16 @@ pipeline {
       }
     }
 
-//  *Commenting this stage because this is all old code and it's too fucked to pass scans so I just need to move on.*
-    // stage('Vulnerability Scan - Docker ') {
-    //   steps {
-    //     sh "mvn dependency-check:check"
-    //   }
-    //   post {
-    //     always {
-    //       dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-    //     }
-    //   }
-    // }
+    stage('Vulnerability Scan - Docker ') {
+      steps {
+        sh "mvn dependency-check:check"
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
+      }
+    }
 
     stage('Docker Build and Push') {
       steps {
@@ -73,7 +72,7 @@ post {
       junit 'target/surefire-reports/*.xml'
       jacoco execPattern: 'target/jacoco.exec'
       pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-      // dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
     }
 
     // success {
